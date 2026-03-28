@@ -3,11 +3,9 @@ from openpyxl import load_workbook
 from Support.Generic.TBS import *
 from Support.Generic.Common import *
 from Support.Generic.Reports import *
-from Support.Generic.Support import *
-from Support.Generic.email import *
 
 
-def testcase_1095b(page, start, end, title, region="STAGING"):
+def testcase_NEC(page, start, end, title, region="STAGING"):
     os.environ["Title"] = title
     form = "NEC"
     sheet_name = form
@@ -24,9 +22,12 @@ def testcase_1095b(page, start, end, title, region="STAGING"):
     else:
         end = int(end)
         
+    business_type = "Employer"
+    recipient_type = "Employee"
     
 
     test_data = None  
+
 
 
 
@@ -53,9 +54,9 @@ def testcase_1095b(page, start, end, title, region="STAGING"):
             "Status": False
         }
         try:
-            go_to_1095B_form(page, test_data)
-            add_employer(page, test_data)
-            add_recipient(page, test_data)
+            go_to_form(page, test_data)
+            add_Payer(page, test_data)
+            add_Recipient(page, test_data)
             form_b(page, test_data)
             review_summary(page, test_data)
             card_payment(page, test_data)

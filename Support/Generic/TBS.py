@@ -9,6 +9,7 @@ from ObjectRepository.Forms.Object_Form1042S import *
 from ObjectRepository.Forms.Object_Form1098 import *
 
 from ObjectRepository.Generic.Login import *
+from ObjectRepository.Generic.BulkUpload import *
 from Support.Generic.Support import *
 from Support.Generic.Reports import *
 from Support.Generic.Common import *
@@ -89,7 +90,7 @@ def go_to_form(page, test_data):
     page.click("(//span[@class='TBS-arrow-down ms-1 fs-10px mt-1'])")
     page.click("//p[contains(text(),'1099/W-2 Dashboard')]")
 
-    form_details = read_excel(form, row, "FormSelection")
+    form_details = read_excel(form, row, "Filing Type")
 
 
     # Click Start New Form
@@ -98,12 +99,13 @@ def go_to_form(page, test_data):
     page.click("//p[contains(text(),'Start New Form')]")
 
     # Handle form selection
-    if form_details == "NEC":
+    if form_details == "MANUAL":
         page.click(Object_FormNEC_Navigation)
         page.click(Object_FormNEC_Navigation_2025)
-    elif form_details == "DIV":
-        page.click(Object_select1095CCAstate)
-        page.click(Object_Form1095CCAstate)
+    elif form_details == "BULK":
+        page.click(Object_FormNEC_Navigation)
+        page.click(Object_FormNEC_Navigation_2025)
+        page.click(Object_Bulknavigation)
     
 
     # Screenshot
@@ -115,33 +117,10 @@ def go_to_form(page, test_data):
     return test_data
 
 
-def go_to_1099HC_form(page, test_data):
-    form = test_data.get("Form")
-    row = test_data.get("Row")
-    scenario_id = test_data.get("Scenario_ID")
-    result = test_data.get("Result", "")
-    time.sleep(5)
-    page.click("(//span[@class='TBS-arrow-down ms-1 fs-10px mt-1'])[4]")
-    page.click("//p[contains(text(),'ACA Dashboard')]")
-
-    form_details = read_excel(form, row, "FormSelection")
-    page.click("//span[text()=' ACA ']")
-    page.click("//p[contains(text(),'Start New Form')]")
-
-    if form_details == "MA State":
-        page.click(Object_Form1099HC)
-        page.click(Object_select1099HCform)
-    else:
-        print("MA form not Selected")
-    
-    add_screenshot(page,scenario_id)
-
-    test_data["Status"] = True
-    test_data["Result"] = f"{result}Navigated to Form "
-    return test_data
 
 
-def add_employer(page, test_data):
+
+def add_Payer(page, test_data):
     # --- Get values from test_data dict ---
     Form = test_data.get("Form")
     row = test_data.get("Row")
@@ -158,8 +137,6 @@ def add_employer(page, test_data):
     Module = read_excel(sheet_name, row, "Module")
     Type = test_data.get("Type")
 
-    #----> Need to ask Sruthi
-    
     PayerName = "TBS TESTING"
     FirstName = "Sruthi"
     LastName = "test"
@@ -180,38 +157,6 @@ def add_employer(page, test_data):
     Zipcode = Address["Zipcode"]
     Country = Address["Country"]
 
-
-    # Other Excel values
-    MaxChar_Employer = read_excel(sheet_name, row, "Max char - Employer")
-    TradeName_Employer = read_excel(sheet_name, row, "Trade Name")
-    ReferenceNumber = read_excel(sheet_name, row, "Reference Number")
-    AddressLine1_Employer = read_excel(sheet_name, row, "Address Line 1")
-    AddressLine2_Employer = read_excel(sheet_name, row, "Address Line 2")
-    City_Employer = read_excel(sheet_name, row, "City")
-    State_Employer = read_excel(sheet_name, row, "StateEmployer")
-    Zipcode_Employer = read_excel(sheet_name, row, "ZIPcodeEmployer")
-    FirstNameValid = read_excel(sheet_name, row, "First Name")
-    MiddleNameValid = read_excel(sheet_name, row, "Middle Name")
-    LastNameValid = read_excel(sheet_name, row, "Last Name")
-    Suffix = read_excel(sheet_name, row, "Suffix")
-    EmailAddress = read_excel(sheet_name, row, "Email Address")
-    PhoneNumberValid = read_excel(sheet_name, row, "Phone Number")
-    SigningAuthorityName = read_excel(sheet_name, row, "Signing Authority Name")
-    SigningAuthorityTitle = read_excel(sheet_name, row, "Signing Authority Title")
-
-    # DGE Details
-    DGEBA = read_excel(sheet_name, row, "DGEBA")
-    DGETradeName = read_excel(sheet_name, row, "DGETradeName")
-    DGEAL1 = read_excel(sheet_name, row, "DGEAL1")
-    DGEAL2 = read_excel(sheet_name, row, "DGEAL2")
-    DGECity = read_excel(sheet_name, row, "DGECity")
-    DGEState = read_excel(sheet_name, row, "DGEState")
-    DGEZIP = read_excel(sheet_name, row, "DGEZIP")
-    DGEFN = read_excel(sheet_name, row, "DGEFN")
-    DGEMN = read_excel(sheet_name, row, "DGEMN")
-    DGELN = read_excel(sheet_name, row, "DGELN")
-    DGEPhonenumber = read_excel(sheet_name, row, "DGEPhonenumber")
-
     # BusinessName = PayerName
 
     # --- Start automation logic ---
@@ -219,12 +164,6 @@ def add_employer(page, test_data):
     if Payer == "CHOOSE":
         page.click('//span[text()=" Select Employer from Address Book "]')
         page.click('(//*[text()="Select Employer"])[1]')
-        page.fill(Object_totalno, "20")
-
-        if Form == "1099HC":
-            page.click("//span[text() = 'Continue to Form 1099-HC ']")
-        else:
-            page.click('//span[text()="Continue to Form 1095-C "]')
 
     elif Payer == "NULL":
         page.click(Object_Addnewemployer)
@@ -245,25 +184,11 @@ def add_employer(page, test_data):
         page.fill(Object_PayerFirstName, FirstName)
         page.fill(Object_PayerLastName, LastName)
         page.click(Object_saveandcontinue)
-        page.click(Object_ignore)
-        page.fill(Object_totalno, "20")
         page.click(Object_continue)
     
     elif Payer == "ADD":
-        # if PayerTIN == "EIN":
-        #     print("Payer TIN is EIN")
-        if sheet_name == "1095B":
-            page.click("//span[text()=' Add Filer']") 
-            page.fill(Object_EIN, Tin)  
-        elif sheet_name == "1094_1095C":
-            page.click(Object_Addnewemployer)  
-            page.fill(Object_EIN, Tin)  
-        elif sheet_name == "1099HC":
-            page.click(Object_Addnewemployer) 
-            page.fill(Object_EIN, Tin)
-        else:
-            print("Form is other than 1095B, 1094_1095C and 1099HC")
-            page.fill(Object_EIN, Tin)
+        page.click(Object_Addnewemployer)
+        page.fill(Object_EIN, Tin)
         page.fill(Object_EmployerName, PayerName)
         page.click(Object_PayerCountryCode)
         page.click(f"//*[contains(text(),'{Country}')]")
@@ -280,39 +205,7 @@ def add_employer(page, test_data):
         page.click(Object_saveandcontinue)
         page.click(Object_ignore)
         time.sleep(5)
-        if Form == "1095B":
-            page.click("//span[text()='Continue to Form 1095-B ']")
-        elif Form == "1099HC":
-            page.click("//span[text() = 'Continue to Form 1099-HC ']")
-        else:
-            page.fill(Object_totalno, "20")
-            page.click(Object_continue)
-        # page.click('(//button[@id="save"])[1]')
-        # page.click('(//button[@id="save"])[2]')
-        # if Country == "United States of America (US)":
-        #     page.click(Object_AddressValid)
-        #     page.click(Object_AddressUSPSRecommended)   
-        #     page.click(Object_IgnoreAndContinue)
-        # if type == "Negative":
-        #     status = page.locator(f"//*[contains(text(),'{ErrorMessage}')]").is_visible()
-        #     if status:
-        #         Result = "Correct Alert" 
-        #     else:
-        #         Result = "Alert Issue"
-        #     if Module == "PAYER":
-        #         generate_report(page, status, Result,test_data)
-        #     else: 
-        #         pass
-        # else:
-        # form_status = page.locator(Object_ChangePayer).is_visible() or \
-        #                 page.locator("//*[contains(text(),'Error occured')]").is_visible()
-        # add_screenshot(page, Scenario_ID)
-        # if form_status:
-        #     Result = f"{PayerType} Saved" 
-        # else:
-        #     Result = "Payer Not Saved"
-        # test_data["Result"] = Result    
-        # print(f"Final Result: {Result}")
+        page.click(Object_continue)
         return test_data
 
             
@@ -337,53 +230,6 @@ def add_employer(page, test_data):
         page.fill(Object_Phonenumber, PhoneNumber)
         page.click('(//button[@id="save"])[1]')
         page.click('(//button[@id="save"])[2]')
-
-    elif Payer == "Valid":
-        page.click(Object_Addnewemployer)
-        page.fill(Object_EmployerName, MaxChar_Employer)
-        page.fill(Object_Trade_name, TradeName_Employer)
-        page.fill(Object_EIN, Tin)
-        page.fill(Object_PayerAddress1, AddressLine1_Employer)
-        page.fill(Object_PayerAddress2, AddressLine2_Employer)
-        page.fill(Object_Payercity, City_Employer)
-        page.click(Object_PayerStateOrProvince)
-        page.click(f"//*[contains(text(),'{State_Employer}')]")
-        page.fill(Object_PayerZipOrPostalCode, Zipcode_Employer)
-        page.fill(Object_PayerFirstName, FirstNameValid)
-        page.fill(Object_PayerMiddleName, MiddleNameValid)
-        page.fill(Object_PayerLastName, LastNameValid)
-        page.click(Object_PayerSuffix)
-        page.click(f"//*[contains(text(),'{Suffix}')]")
-        page.fill(Object_EmailAddress, EmailAddress)
-        page.fill(Object_Phonenumber, PhoneNumberValid)
-        page.click(Object_SigningAuthorityName)
-        page.click(Object_SigningAuthorityTitle)
-        # DGE Details
-        page.click(Object_DGE)
-        page.click(Object_DGEcheckbox)
-        page.fill(Object_DGEBusinessname, DGEBA)
-        page.fill(Object_DGETradename, DGETradeName)
-        page.fill(Object_DGEEIN, Tin)
-        page.fill(Object_DGEAddressline1, DGEAL1)
-        page.fill(Object_DGEAddressline2, DGEAL2)
-        page.fill(Object_DGECity, DGECity)
-        page.click(Object_DGEstate)
-        page.click(f"//*[contains(text(),'{DGEState}')]")
-        page.fill(Object_DGEZipcode, DGEZIP)
-        page.fill(Object_DGEFN, DGEFN)
-        page.fill(Object_DGEMN, DGEMN)
-        page.fill(Object_DGELN, DGELN)
-        page.fill(Object_DGEPN, DGEPhonenumber)
-        page.click(Object_saveandcontinue)
-        time.sleep(5)
-        page.click(Object_ignore)
-        page.fill(Object_totalno, "20")
-        page.click(Object_continue)
-
-    elif Payer == "Invalid":
-        # Same as Valid but add screenshot and exception handling
-        pass
-
     test_data["Result"] = f"{Result}; Employer Added"
     return test_data
 
@@ -391,177 +237,7 @@ def Selecting_Employee_from_Address_Book(page):
     page.click('//*[text()=" Select Employee from Address Book "]')
     page.click('(//span[text()="Select Employee"])[1]')
 
-def add_employee(page, TestData):
-    Form = TestData.get("Form")
-    Row = TestData.get("Row")
-    Scenario_ID = TestData.get("Scenario_ID")
-    Result = TestData.get("Result")
-    RecipientType = TestData.get("RecipientType")
-    Sheet = Form
-
-    Recipient = read_excel(Sheet, Row, RecipientType)
-    RecipientTIN = read_excel(Sheet, Row, f"{RecipientType} TIN")
-    Country = read_excel(Sheet, Row, f"{RecipientType} Country")
-    Form_Action = read_excel(Sheet, Row, "Form_Action")
-    Type = read_excel(Sheet, Row, "Type")
-    ErrorMessage = read_excel(Sheet, Row, "ErrorMessage")
-    Module = read_excel(Sheet, Row, "Module")
-
-
-    Line14_All12Months = read_excel(Sheet, Row, "Line14_All12Months")
-    Plan_Start_month = read_excel(Sheet, Row, "Plan_Start_month")
-
-    FirstName = fake.first_name()
-    TestData["FirstName"] = FirstName
-    LastName = fake.last_name()
-    TIN = fake.ssn()
-    Email = f"davidrajan.a+{FirstName}@spantechnologyservices.com"
-    PhoneNumber = "8300520076"
-    DBA = fake.company()
-
-    AddressLine1 = fake.street_address()
-    City = fake.city()
-    State, Zipcode = random_us_state_zip()
-    Country = Country[0:2]
-    TestData[State] = State
-
-    if Recipient == "CHOOSE":
-        page.click("(//*[text()=' Select Employee from Address Book '])")
-        page.click("(//span[text() ='Select Employee'])[1]")
-        time.sleep(5)
-        if Form == "1099HC":
-            page.click(Object_Subs)
-            page.fill(Object_Subs, "999999999")
-            time.sleep(5)
-            page.click("(//input[@aria-label ='DOB'])[3]")
-            time.sleep(5)
-            page.fill("(//input[@aria-label ='DOB'])[3]", "01/07/2002")  
-            time.sleep(5)
-
-            page.click("(//button[.//span[contains(normalize-space(.), 'Save') and contains(., 'Continue')]])[2]")   
-            page.click(Object_ignore)
-            page.click("//label[text()='Full-year minimum creditable coverage?']/following-sibling::div/div/div/span[1]")
-            page.click("//span[text() ='Save & Continue ']")
-            page.click(Object_formdistribution)
-
-        print("inside Choose")
-
-    elif Recipient == "ADD":
-        page.click(Object_newemployee)
-        if RecipientTIN == "SSN":
-            page.fill(Object_ssn1095C, TIN)
-            page.fill(Object_firstname, FirstName)
-            page.fill(Object_lastname, LastName)
-
-        elif RecipientTIN == "TIN Not Provide":
-            page.fill(Object_ssn1095C, TIN)
-
-        page.click("//*[text()=' Country ']/parent::div/div")
-
-        #Country Have to Ask with Sruthi -- now IM bypaasing this step
-        # page.fill(f"//input[@aria-label='Country' and @value='{Country}']") 
-
-
-        page.fill(Object_Addressline11095C, AddressLine1)
-        page.fill(Object_city1095C, City)
-        page.click("//*[text()='State']/parent::div/div")
-        page.click(f"//*[contains(text(),'{State}')]")
-        if Form == "LTC":
-            page.fill("(//input[@id='zipcode'])[2]", Zipcode)
-        else:
-            page.fill(Object_zipcode1095C, Zipcode)
-        page.fill(Object_emailaddress1095c, Email)
-        page.fill(Object_phonenumber1095C, PhoneNumber)
-        page.click(Object_saveandcontinue)
-        page.click(Object_ignore)
-        time.sleep(5)   
-        TestData["Recipient_TIN"] = TIN
-        TestData["Result"] = f"{Result}; Employee Added"
-        return TestData
-    
-    elif Recipient == "NO":
-        page.click(Object_newemployee)
-        DOB = fake.date_of_birth(minimum_age=18, maximum_age=120).strftime("%m/%d/%Y")
-        Subs = random.randint(99999999, 99999999999)
-        page.fill("(//input[@aria-label ='DOB'])[3]", DOB)    
-
-        page.fill(Object_firstname, FirstName)
-        page.fill(Object_lastname, LastName)
-        page.fill(Object_Addressline11095C, AddressLine1)
-        page.fill(Object_city1095C, City)
-        page.click(Object_Subs)
-        page.fill(Object_Subs, "999999999")
-        page.click("//*[text()='State']/parent::div/div")
-        page.click(f"//*[contains(text(),'Massachusetts (MA)')]")
-        if Form == "LTC":
-            page.fill("(//input[@id='zipcode'])[2]", "02115")
-        else:
-            page.fill(Object_zipcode1095C, "02115")
-        # page.fill(Object_emailaddress1095c, Email)
-        # page.fill(Object_phonenumber1095C, PhoneNumber)
-        page.click("(//button[.//span[contains(normalize-space(.), 'Save') and contains(., 'Continue')]])[2]")   
-        page.click(Object_ignore)
-        # page.click("//span[normalize-space(text())='Yes']")
-        page.click("//input[@id ='ein']")
-        page.click("(//button[.//span[contains(normalize-space(.), 'Save') and contains(., 'Continue')]])")
-        TestData["Result"] = f"{Result}; Employee Added"
-
-    elif Recipient == "NULL":
-        page.click(Object_newemployee)
-        page.click(Object_saveandcontinue1095C)
-        page.click('//span[text()="Add Employee"]/parent::div/button')
-        Selecting_Employee_from_Address_Book(page)
-
-    elif Recipient == "CHANGE":
-        if RecipientTIN == "SSN":
-            page.fill(Object_ssn1095C, TIN)
-            page.fill(Object_firstname, FirstName)
-            page.fill(Object_lastname, LastName)
-        # elif RecipientTIN == "EIN":
-        # elif RecipientTIN == "DOB":
-        else: 
-            pass
-
-        page.fill(Object_Trade_name, DBA)
-        page.click('//*[@id="countrycode"]/parent::div')
-        page.fill(f"//*[contains(text(),'{Country}')]")
-        page.fill(Object_Addressline11095C, AddressLine1)
-        page.fill(Object_city1095C, City)
-        page.click('//*[@id="statecode"]/parent::div')
-        page.fill(f"//*[contains(text(),'{State}')]")
-        page.fill(Object_zipcode1095C, Zipcode)
-        page.wait_for_timeout(5000)
-        page.fill(Object_emailaddress1095c, Email)
-        page.fill(Object_phonenumber1095C, PhoneNumber)
-        time.sleep(5)   
-        page.click(Object_saveandcontinue)
-        page.click(Object_ignore)
-
-    if Recipient == "CHOOSE":
-        page.click('//td[text()=" Offer of Coverage (enter required code) "]/following-sibling::td)[1]/div')
-        page.click(f"//*[contains(text(),'{Line14_All12Months}')]")
-        page.click('//input[@id="planstartmonth"]/parent::div/parent::div/following-sibling::div/i')
-        page.click(f"//*[contains(text(),'{Plan_Start_month}')]")
-        page.click(Object_saveandcontinue1095Cemployee)
-        time.sleep(5)
-
-    else:
-        try:
-            page.click(Object_saveandcontinue1095C)
-        except:
-            time.sleep(3)
-            page.click('//td[text()=" Offer of Coverage (enter required code) "]/following-sibling::td)[1]/div')
-            page.click(f"//*[contains(text(),'{Line14_All12Months}')]")
-            page.click('//input[@id="planstartmonth"]/parent::div/parent::div/following-sibling::div/i')
-            page.click(f"//*[contains(text(),'{Plan_Start_month}')]")
-            page.click(Object_saveandcontinue1095Cemployee)
-            time.sleep(5)
-
-    TestData["Recipient_TIN"] = TIN
-    TestData["Result"] = Result
-    return TestData
-
-def add_recipient(page, TestData):
+def add_Recipient(page, TestData):
     Form = TestData.get("Form")
     Row = TestData.get("Row")
     Scenario_ID = TestData.get("Scenario_ID")
@@ -648,7 +324,7 @@ def add_recipient(page, TestData):
 
 
 
-def bulk_upload_1095c(page, test_data, projectDirectory):
+def bulk_upload_1095c(page, test_data, project_directory):
 
     Form = test_data.get("Form")
     Row = test_data.get("Row")
@@ -672,17 +348,15 @@ def bulk_upload_1095c(page, test_data, projectDirectory):
         time.sleep(10)
 
         if Scenario == "Valid 500":
-            page.wait_for_selector(Object_Bulkupload, state="enabled", timeout=10000)
-            page.set_input_files(Object_Bulkupload, os.path.join(projectDirectory, "TestData", "TBS_1095-C_Employees_Template (500).xlsx"))
+            page.set_input_files(Object_bulkupload, os.path.join(project_directory, f"ACA_Playwright/TestData//1095C TBS_ DC State.xlsx"))
             time.sleep(10)
-            page.click(Object_Bulkcontinue)
+            page.click(Object_bulkcontinue)
             time.sleep(20)
 
         elif Scenario == "Allstate":
-            page.wait_for_selector(Object_Bulkupload, state="enabled", timeout=10000)
-            page.set_input_files(Object_Bulkupload, os.path.join(projectDirectory, "TestData", "1095-C_Employees_Template (all States).xlsx"))
+            page.set_input_files(Object_bulkupload, os.path.join(project_directory, f"ACA_Playwright/TestData//1095-C_Employees_Template (all States).xlsx"))
             time.sleep(20)
-            page.click(Object_Bulkcontinue)
+            page.click(Object_bulkcontinue)
             time.sleep(15)
 
         time.sleep(50)
@@ -695,7 +369,7 @@ def bulk_upload_1095c(page, test_data, projectDirectory):
             page.click(Object_skipcontinuefiling)
         except:
             time.sleep(5)
-        time.sleep(3)
+
 
     except Exception as e:
         time.sleep(2)
@@ -704,8 +378,63 @@ def bulk_upload_1095c(page, test_data, projectDirectory):
 
     test_data["Recipient_TIN"] = TIN
     test_data["Result"] = Result
-    print(f"{Scenario_ID} - {Result}")
     return test_data
+
+def bulk_upload_1095b(page, test_data, project_directory):
+    Form = test_data.get("Form")
+    Row = test_data.get("Row")
+    Scenario_ID = test_data.get("Scenario_ID")
+    Result = test_data.get("Result", "")
+    RecipientType = test_data.get("RecipientType")
+    Sheet = Form
+
+    Recipient = read_excel(Sheet, Row, RecipientType)
+    RecipientTIN = read_excel(Sheet, Row, f"{RecipientType}TIN")
+    Country = read_excel(Sheet, Row, f"{RecipientType}Country")
+    Form_Action = read_excel(Sheet, Row, "Form_Action")
+    Type = read_excel(Sheet, Row, "Type")
+    ErrorMessage = read_excel(Sheet, Row, "ErrorMessage")
+    Module = read_excel(Sheet, Row, "Module")
+    Scenario = read_excel(Sheet, Row, "Recipient Count")
+    TIN = test_data.get("tin", RecipientTIN)
+
+    try:
+        page.click(Object_BulkImporttoggle)
+        time.sleep(10)
+
+        if Scenario == "Valid 500":
+            page.set_input_files(Object_bulkupload, os.path.join(project_directory, f"ACA_Playwright/TestData//1095B TBS_ CA State.xlsx"))
+            time.sleep(10)
+            page.click(Object_bulkcontinue)
+            time.sleep(20)
+
+        elif Scenario == "Allstate":
+            page.set_input_files(Object_bulkupload, os.path.join(project_directory, f"ACA_Playwright/TestData//1095B TBS_ CA State.xlsx"))
+            time.sleep(20)
+            page.click(Object_bulkcontinue)
+            time.sleep(15)
+
+        time.sleep(50)
+        page.click(Object_continuetoprocess)
+        time.sleep(70)
+        page.click(Object_previewcontinue)
+        time.sleep(5)
+
+        try:
+            page.click(Object_skipcontinuefiling)
+        except:
+            time.sleep(5)
+
+
+    except Exception as e:
+        time.sleep(2)
+        print(f"Bulk upload exception: {e}")
+
+
+    test_data["Recipient_TIN"] = TIN
+    test_data["Result"] = Result
+    return test_data
+
 
 def form_c(page, TestData):
     Form = TestData.get("Form")
@@ -841,12 +570,12 @@ def review_summary(page, TestData):
     DOB = fake.date_of_birth(minimum_age=18, maximum_age=120).strftime("%m/%d/%Y")
     Subs = random.randint(99999999, 99999999999)
     try:
-        if Form == "1095B":
+        if Form in ("1095B", "BulkUpload_B"):
             page.click(Object_continuetostate1095b)
             page.click(Object_formdistribution)
         elif Form_details in ["CA State", "DC State", "NJ State", "RI State"]:
             page.click(Object_stateformdistribution)
-        elif Form == "1094_1095C":
+        elif Form in ("1094_1095C", "BulkUpload"):
             page.click(Object_continuetostate)
             if TestData.get("State") == "Massachusetts":
                 page.click(Object_formdistribution)
@@ -949,25 +678,21 @@ def card_payment(page, TestData):
 
     else:
         print("No Payment Details Provided")
-    time.sleep(10)
-    Status = page.locator("//div[contains(text(), ' Print Forms ')]").is_visible()
+    time.sleep(6)
+
+    confirm = page.locator("//img[@src='/assets/static/TBS-new-logo.CiEqp9Ru.svg']").is_visible()
     OrderID = page.text_content("//p[contains(text(),'Order ID')]/following-sibling::div")
-    time.sleep(8)
-    if Status == True:
-        TestData["Result"] = f"{Result}; Payment Completed"
-        Result = f"{Result}; Order ID - {OrderID}"
-        Status = True
+    # time.sleep(5)
+    if confirm == True:
+        TestData["Result"] = f"{Result}; Payment Completed; Order ID - {OrderID} "
+
 
     else:
         TestData["Result"] = f"{Result}; Payment failed"
-        Status = False  
+        TestData["Status"] = False  
     add_screenshot(page, Scenario_ID)
 
-    page.click("//span[@class='v-btn__content' and .//span[text()='Home']]")
-    page.click("//span[text() = 'Go to Home Dashboard']")
-
-    # page.click(Object_gotodashboard)
-    # page.click("//button[@aria-label='Dashboard']")
+    page.click("//img[@src='/assets/static/TBS-new-logo.CiEqp9Ru.svg']")
 
     return TestData
 

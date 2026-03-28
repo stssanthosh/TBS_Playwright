@@ -8,7 +8,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 import base64
 from Support.Generic.email import *
-from Support.Generic.support import *
+from Support.Generic.Support import *
 
 
 

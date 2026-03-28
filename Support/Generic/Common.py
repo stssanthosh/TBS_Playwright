@@ -1,5 +1,5 @@
-from Support.Generic.report import *
-from ObjectRepository.Generic.login import *
+from Support.Generic.Reports import *
+from ObjectRepository.Generic.Login import *
 import random 
 
 def fake_ein():
