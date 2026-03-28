@@ -41,6 +41,4 @@ Object_Form941ScheduleRQ3Template = "//div[contains(text(),'Form 941 Schedule R 
 Object_Form941ScheduleRQ4Template = "//div[contains(text(),'Form 941 Schedule R Q4 Template')]/following-sibling::div/button"
 Object_Form940Template = "//div[contains(text(),'Form 940 Template')]/following-sibling::div/button"
 Object_Form940ScheduleRTemplate = "//div[contains(text(),'Form 940 Schedule R Template')]/following-sibling::div/button"
-Object_Form1095-BTemplate = "//div[contains(text(),'Form 1095-B Template')]/following-sibling::div/button"
-Object_Form1095-CTemplate = "//div[contains(text(),'Form 1095-C Template')]/following-sibling::div/button"
 Object_FormMA1099-HCTemplate = "//div[contains(text(),'Form MA 1099-HC Template')]/following-sibling::div/button"

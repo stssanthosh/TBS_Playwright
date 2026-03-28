@@ -19,7 +19,7 @@ def file_sheet_index(file_name, sheet_name):
 
     project_directory = os.environ["PROJECT_DIRECTORY"]
 
-    file_path = os.path.join(project_directory, f"ACA_Playwright/TestData//{file_name}.xlsx")
+    file_path = os.path.join(project_directory, f"TestData/{file_name}.xlsx")
     wb = load_workbook(file_path)
     ws = wb[sheet_name]
 
