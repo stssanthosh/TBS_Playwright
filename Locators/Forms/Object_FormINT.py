@@ -1,0 +1,18 @@
+# Auto-generated locators from INT.xml
+
+Object_FormINT_PayersRTN = "//input[@id='payerrtn']"
+Object_FormINT_InterestIncome = "//input[@id='b1interestincome']"
+Object_FormINT_EarlyWithdrawalPenalty = "//input[@id='b2earlywithdrawalpenalty']"
+Object_FormINT_InterestOnUSSavingsBondsAndTreasObligations = "//input[@id='b3interestonus']"
+Object_FormINT_FederalIncomeTaxWithheld = "//input[@id='b4fitwithheld']"
+Object_FormINT_InvestmentExpenses = "//input[@id='b5investmentexpense']"
+Object_FormINT_ForeignTaxPaid = "//input[@id='b6foreigntaxpaid']"
+Object_FormINT_ForeignCountryOrUSpossession = "//input[@id='b7foreignorus']"
+Object_FormINT_Tax_ExemptInterest = "//input[@id='b8taxexemptinterest']"
+Object_FormINT_SpecifiedPrivateActivityBondInterest = "//input[@id='b9bondinterest']"
+Object_FormINT_MarketDiscount = "//input[@id='ty14b10marketdiscount']"
+Object_FormINT_BondPremium = "//input[@id='ty14b11bondpremium']"
+Object_FormINT_BondPremiumOnTreasuryObligations = "//input[@id='ty16bondpremiumtreasuryobligations']"
+Object_FormINT_BondPremiumOnTaxExempt = "//input[@id='bondpremiumontaxexempt']"
+Object_FormINT_Tax_exemptAndTaxCreditBondCUSIPNo = "//input[@id='b10taxexemptcusip']"
+Object_FormINT_AccountNumber=  "//*[@id='AccountNumber']"

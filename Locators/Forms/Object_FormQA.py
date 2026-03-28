@@ -1,0 +1,7 @@
+Object_FormQA_AccountNumber="//*[@id='accno']"
+Object_FormQA_GrossDistibution="//*[@id='Gross']"
+Object_FormQA_Earnings="//*[@id='Earnings']"
+Object_FormQA_Basis="//*[@id='Basis']"
+Object_FormQA_Programtoprogramtransfer="//*[@id='B4IsProgramTransfer']"
+Object_FormQA_CheckifABLEaccountterminatedinthecalendaryearreported="//*[@id='B5IsABLEAccountTerminated']"
+Object_FormQA_Checkiftherecipientisnotthedesignatedbeneficiary="//*[@id='B6IsNotDesignatedBeneficiary']"

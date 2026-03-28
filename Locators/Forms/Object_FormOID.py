@@ -1,0 +1,16 @@
+# Auto-generated locators from OID.xml
+
+Object_FormOID_AccountNumber = "//*[@id='Account']"
+Object_FormOID_FATCAFillingRequirement = "//*[@id='IsFatcaFilling']"
+Object_FormOID_SecondTINnot = "//*[@id='IsSecondTinNot']"
+Object_FormOID_OriginalIssueDiscountForTheYear = "//*[@id='B1OriginalIssueDiscount']"
+Object_FormOID_OtherPeriodicInterest = "//*[@id='B2OtherPeriodicInterest']"
+Object_FormOID_EarlyWithdrawalPenalty = "//*[@id='B3EarlyWithdrawalPenalty']"
+Object_FormOID_FederalIncomeTaxWithheld = "//*[@id='B4FederalIncomeTaxWithheld']"
+Object_FormOID_MarketDiscount = "//*[@id='B5MarketDiscount']"
+Object_FormOID_AcquisitionPremium = "//*[@id='B6AcquisitionPremium']"
+Object_FormOID_Description = "//*[@id='B7Description']"
+Object_FormOID_OriginalIssueDiscountOnUSTreasuryObligations = "//*[@id='B8OriginalIssueDiscountUSTreasury']"
+Object_FormOID_InvestmentExpenses = "//*[@id='B9InvestmentExpenses']"
+Object_FormOID_BondPremium = "//*[@id='B10BondPremium']"
+Object_FormOID_TaxExcemptOID = "//*[@id='B11TaxExemptOID']"

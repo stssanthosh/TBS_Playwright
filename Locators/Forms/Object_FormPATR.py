@@ -1,0 +1,16 @@
+# Auto-generated locators from PATR.xml
+
+Object_FormPATR_PatronageDividends = "//*[@id='patronagedividends']"
+Object_FormPATR_NonPatronageDistributions = "//*[@id='nonpatronagedistributions']"
+Object_FormPATR_PreUnitRetainAllocations = "//*[@id='perunitretainallocations']"
+Object_FormPATR_FederalIncomeTaxWithheld = "//*[@id='federalincometaxwithheld']"
+Object_FormPATR_RedeemedNonQualifiedNotices = "//*[@id='redeemednonqualifiednotices']"
+Object_FormPATR_Section199AGDeduction = "//*[@id='sec199agdeduction']"
+Object_FormPATR_QualifiedPaymentsSection199AB7 = "//*[@id='qualifiedpayments']"
+Object_FormPATR_Section199AAQualItems = "//*[@id='sec199aaqualitems']"
+Object_FormPATR_Section199AASSTBItems = "//*[@id='sec199aasstbitems']"
+Object_FormPATR_InvestmentCredit = "//*[@id='investmentcredit']"
+Object_FormPATR_WorkOpportunityCredit = "//*[@id='workopportunitycredit']"
+Object_FormPATR_OtherCreditAndDeductions = "//*[@id='othercreditsanddeductions']"
+Object_FormPATR_SpecifiedCoop = "//*[@id='isspecifiedcoop']"
+Object_FormPATR_AccountNumber = "//*[@id='AccountNumber']"
